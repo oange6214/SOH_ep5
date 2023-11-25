@@ -27,4 +27,31 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
             return new List<User>();
         }
     }
+
+    public async Task<bool> UpdateUserProfile(User user)
+    {
+        try
+        {
+            var exitingUser =  await _dbSet.Where(x => x.Status == 1 && x.Id == user.Id)
+                                                    .FirstOrDefaultAsync();
+
+            if (exitingUser == null)
+                return false;
+
+            exitingUser.FirstName = user.FirstName;
+            exitingUser.LastName = user.LastName;
+            exitingUser.MobileNumber = user.MobileNumber;
+            exitingUser.Phone = user.Phone;
+            exitingUser.Sex = user.Sex;
+            exitingUser.Address = user.Address;
+            exitingUser.UpdateDate = DateTime.UtcNow;
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "{Repo} UpdateUserProfile method has generated an error", typeof(UsersRepository));
+            return false;
+        }
+    }
 }
