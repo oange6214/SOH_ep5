@@ -18,8 +18,8 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
         try
         {
             return await _dbSet.Where(x => x.Status == 1)
-                            .AsNoTracking()
-                            .ToListAsync();
+                               .AsNoTracking()
+                               .ToListAsync();
         }
         catch (Exception ex)
         {
@@ -33,7 +33,7 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
         try
         {
             var exitingUser =  await _dbSet.Where(x => x.Status == 1 && x.Id == user.Id)
-                                                    .FirstOrDefaultAsync();
+                                                .FirstOrDefaultAsync();
 
             if (exitingUser == null)
                 return false;
@@ -52,6 +52,21 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
         {
             _logger.LogError(ex, "{Repo} UpdateUserProfile method has generated an error", typeof(UsersRepository));
             return false;
+        }
+    }
+
+    public async Task<User> GetByIdentityId(Guid identityId)
+    {
+        try
+        {
+            return await _dbSet.Where(x => x.Status == 1 && x.IdentityId == identityId)
+                               .AsNoTracking()
+                               .FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "{Repo} GetByIdentityId method has generated an error", typeof(UsersRepository));
+            return null;
         }
     }
 }
