@@ -16,11 +16,14 @@ builder.Services.AddControllers();
 // Update the JWT config from the settings.
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection("JwtConfig"));
 
+// Add DbContext for the API
 builder.Services.AddDbContext<AppDbContext>(options => 
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Adding dependency injection for UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+// Enabling Api Versioning
 builder.Services.AddApiVersioning(opt =>
 {
     // Provides to the client the different Api versions that we have. 
