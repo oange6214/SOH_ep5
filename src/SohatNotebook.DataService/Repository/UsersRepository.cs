@@ -60,7 +60,6 @@ public class UsersRepository : GenericRepository<User>, IUsersRepository
         try
         {
             return await _dbSet.Where(x => x.Status == 1 && x.IdentityId == identityId)
-                               .AsNoTracking()
                                .FirstOrDefaultAsync();
         }
         catch (Exception ex)
